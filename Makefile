@@ -6,14 +6,14 @@
 #    By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/03/05 14:47:20 by nmohamed          #+#    #+#              #
-#    Updated: 2015/12/08 17:44:47 by nmohamed         ###   ########.fr        #
+#    Updated: 2015/12/08 17:50:19 by nmohamed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC		:=	main.c room_list.c
 
 CC		:=	gcc
-NAME	:=	scop
+NAME	:=	lemin
 INC		:=	-I./ -I./libft -I$(HOME)/.brew/include/
 OBJ		:=	$(SRC:.c=.o)
 CFLAGS	:=	 -Wall -Wextra -Werror
