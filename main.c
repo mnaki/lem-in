@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/08 18:35:22 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/08 21:07:50 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,17 +134,75 @@ void	parse_tubes(void)
 	}
 }
 
-int		main(void)
+void mark_distance(t_room_list *cur, int distance)
 {
-	T_RL	*cur;
+	T_RL	*pipe;
 
-	parse_rooms();
-	cur = g_room_list;
-	while (cur->next != NULL)
+	while (cur != NULL)
 	{
-		ft_printf("name\t%s\nx\t%d\ny\t%d\n\n", cur->room->name, cur->room->x, cur->room->y);
+		ft_printf("name\t%s\nx\t%d\ny\t%d\npipes\t", cur->room->name, cur->room->x, cur->room->y);
+		pipe = cur->room->other_rooms;
+		while (pipe != NULL)
+		{
+			pipe->room->distance = distance;
+			ft_printf("%s, ", pipe->room->name);
+			mark_distance(pipe, distance + 1);
+			pipe = pipe->next;
+		}
 		cur = cur->next;
 	}
+}
+
+T_RL	*room_find_next(t_room *current)
+{
+	t_room_list	*best_node;
+	t_room_list	*other_room;
+
+	best_node = current->other_rooms;
+	other_room = best_node;
+	if (other_room == NULL)
+		ft_exit("No way out!");
+	while (other_room != NULL)
+	{
+		ft_printf("%s@%d <V>S %s@%d\n", other_room->room->name, other_room->room->distance, best_node->room->name, best_node->room->distance);
+		if (other_room->room->distance < best_node->room->distance)
+			best_node = other_room;
+		other_room = other_room->next;
+	}
+	return (best_node);
+}
+
+void	follow_path(t_room *current)
+{
+	ft_printf("L%d-%s (%d)\n", 0, current->name, current->distance);
+	if (current == g_end)
+		ft_exit("OK");
+	follow_path(room_find_next(current)->room);
+}
+
+int		main(void)
+{
+	// T_RL	*cur;
+	// T_RL	*pipe;
+
+	parse_rooms();
 	parse_tubes();
+	// cur = g_room_list;
+	// while (cur != NULL)
+	// {
+	// 	ft_printf("name\t%s\nx\t%d\ny\t%d\npipes\t", cur->room->name, cur->room->x, cur->room->y);
+	// 	pipe = cur->room->other_rooms;
+	// 	while (pipe != NULL)
+	// 	{
+	// 		ft_printf("%s, ", pipe->room->name);
+	// 		pipe = pipe->next;
+	// 	}
+	// 	ft_printf("\n\n");
+	// 	cur = cur->next;
+	// }
+
+	mark_distance(g_end->other_rooms, 1);
+	ft_printf("\n");
+	follow_path(g_start);
 	return (0);
 }
