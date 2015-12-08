@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/08 18:21:07 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/08 18:35:22 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	parse_rooms(void)
 
 	while ((line = ft_get_line(0)) != NULL)
 	{
+		g_last_line = line;
 		if (line[0] == '#' && line[1] == '#')
 		{
 			if (ft_strcmp(line, "##start") == 0)
@@ -97,9 +98,46 @@ void	parse_rooms(void)
 	}
 }
 
+void	parse_tube(char *line)
+{
+	char	**tok;
+	t_room	*u;
+	t_room	*v;
+
+	if (line[0] == '#')
+	{
+		ft_putendl(line);
+		return ;
+	}
+	tok = ft_strsplit(line, '-');
+	u = room_find_by_name(g_room_list, tok[0]);
+	v = room_find_by_name(g_room_list, tok[1]);
+	if (u == NULL || v == NULL)
+		ft_exit("No such room / Invalid pipe");
+	if (u->other_rooms == NULL)
+	{
+		u->other_rooms = ft_memalloc(sizeof(*u->other_rooms));
+		u->other_rooms->room = v;
+	}
+	else
+		room_push_back(u->other_rooms, v);
+}
+
+void	parse_tubes(void)
+{
+	char	*line;
+
+	parse_tube(g_last_line);
+	while ((line = ft_get_line(0)) != NULL)
+	{
+		parse_tube(line);
+	}
+}
+
 int		main(void)
 {
 	T_RL	*cur;
+
 	parse_rooms();
 	cur = g_room_list;
 	while (cur->next != NULL)
@@ -107,5 +145,6 @@ int		main(void)
 		ft_printf("name\t%s\nx\t%d\ny\t%d\n\n", cur->room->name, cur->room->x, cur->room->y);
 		cur = cur->next;
 	}
+	parse_tubes();
 	return (0);
 }
