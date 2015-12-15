@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 18:58:06 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/15 19:12:29 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void		parse_room(char *line)
 	g_next_attr = NULL;
 	room_push_front(&g_room_list, &room);
 	ft_printf("%s %d %d\n", g_room_list->name, g_room_list->x, g_room_list->y);
-	//printf("%p\n")
 }
 
 void	room_push_front(t_room **room_head, t_room *room_to_copy)
@@ -110,22 +109,35 @@ t_room	*room_find_by_name(t_room *room, char *name)
 	return (NULL);
 }
 
+t_room	*room_find_by_attr(t_room *room, char *attr)
+{
+	while (room != NULL)
+	{
+		if (ft_strcmp(attr, room->attr) == 0)
+		{
+			return (room);
+		}
+		room = room->next;
+	}
+	return (NULL);
+}
+
 void	calculate_route(t_room *room, int distance)
 {
 	t_neighbour	*neighbour;
 
-	distance = distance + 1;
-	if (room != NULL || ft_strcmp("##start", room->name) == 0)
+	if (room != NULL && ft_strcmp("##start", room->name) == 0)
+		return ;
+	if (room != NULL)
 	{
 		neighbour = room->next_neighbour;
-		//ft_printf("neighbour = room->next_neighbour (%s)\n", neighbour->room->name);
 		while (neighbour != NULL)
 		{
-			neighbour->room->distance = distance;
-			//ft_printf("neighbour->room->distance = %d\n", distance);
-			calculate_route(neighbour->room, distance);
+			if (distance < neighbour->room->distance)
+				neighbour->room->distance = distance;
+			printf("neighbour %s, distance %d\n", neighbour->room->name, neighbour->room->distance);
+			calculate_route(neighbour->room, distance + 1);
 			neighbour = neighbour->next;
-			//ft_printf("neighbour = neighbour->next (%s)\n", neighbour->room->name);
 		}
 	}
 }
@@ -243,6 +255,7 @@ int		main(void)
 		}
 		tmp = tmp->next;
 	}
-	//calculate_route(g_room_list, 0);
+	calculate_route(room_find_by_attr(g_room_list, "##end"), 0);
+	//follow_route(room_find_by_attr(g_room_list, "##start"));
 	return (EXIT_SUCCESS);
 }
