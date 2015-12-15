@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 18:08:31 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/15 18:24:22 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void		parse_room(char *line)
 	room.attr = g_next_attr;
 	g_next_attr = NULL;
 	room_push_front(&g_room_list, &room);
+	ft_printf("%s %d %d\n", g_room_list->name, g_room_list->x, g_room_list->y);
 }
 
 void	room_push_front(t_room **room_head, t_room *room_to_copy)
@@ -63,7 +64,7 @@ void	room_push_front(t_room **room_head, t_room *room_to_copy)
 	t_room		*new_room;
 
 	new_room = malloc(sizeof(*new_room));
-	ft_memcpy(new_room, room_to_copy, sizeof(room_to_copy));
+	ft_memcpy(new_room, room_to_copy, sizeof(*room_to_copy));
 	new_room->next = *room_head;
 	*room_head = new_room;
 }
@@ -76,9 +77,10 @@ void	parse_tube(char *line)
 
 	token = ft_strsplit(line, '-');
 	left = room_find_by_name(g_room_list, token[0]);
-	ft_putendl("LEFT");
 	right = room_find_by_name(g_room_list, token[1]);
-	ft_putendl("RIGHT");
+	ft_putstr(left->name);
+	ft_putstr("-");
+	ft_putendl(right->name);
 	neighbour_push_front(&left->next_neighbour, right);
 	neighbour_push_front(&right->next_neighbour, left);
 }
@@ -97,10 +99,6 @@ t_room	*room_find_by_name(t_room *room, char *name)
 {
 	while (room != NULL)
 	{
-		ft_putstr(name);
-		ft_putstr(" <> ");
-		ft_putstr(room->name);
-		ft_putstr("\n");
 		if (ft_strcmp(name, room->name) == 0)
 		{
 			return (room);
@@ -191,36 +189,37 @@ int		main(void)
 	line = NULL;
 	while ((line = ft_get_line(STDIN_FILENO)) != NULL)
 	{
-		ft_putendl("while top");
+		//ft_putendl("while top");
 		if (line[0] == '#' && line[1] == '#')
 		{
-			ft_putendl("a");
-			ft_putendl(line);
+			//ft_putendl("a");
 			g_next_attr = ft_strdup(line);
+			ft_putendl(g_next_attr);
 		}
 		else if (line[0] == '#')
 		{
-			ft_putendl("b");
-			ft_putstr(line);
+			//ft_putendl("b");
+			ft_putendl(line);
 		}
 		else if (count_occurences_of_char(line, ' ') == 2)
 		{
-			ft_putendl("c");
+			//ft_putendl("c");
 			parse_room(line);
 		}
 		else if (count_occurences_of_char(line, ' ') == 0 && ft_strchr(line, '-'))
 		{
-			ft_putendl("d");
+			//ft_putendl("d");
 			parse_tube(line);
 		}
 		else if (count_occurences_of_char(line, ' ') == 0 && ft_strisnum(line))
 		{
-			ft_putendl("e");
+			//ft_putendl("e");
 			g_ant_count = ft_atoi(line);
 		}
-		ft_putendl("freeing line");
+		//ft_putendl("freeing line");
 		ft_strdel(&line);
-		ft_putendl("while bottom");
+		//ft_putendl("while bottom");
 	}
+	calculate_route(g_room_list, 0);
 	return (EXIT_SUCCESS);
 }
