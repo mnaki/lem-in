@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:46:33 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 17:48:24 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/15 17:50:57 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ struct s_neighbour
 
 extern t_room	*g_room_list;
 extern char		*g_next_attr;
+extern int		g_ant_count;
 
 void			parse_room(char *line);
 void			room_push_front(t_room **room_head, t_room *room_to_copy);

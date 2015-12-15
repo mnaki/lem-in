@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 17:48:27 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/15 18:08:31 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 char	*g_next_attr = NULL;
 t_room	*g_room_list = NULL;
+int		g_ant_count = 0;
 
 char	*ft_get_line(int const fd)
 {
@@ -22,7 +23,6 @@ char	*ft_get_line(int const fd)
 	char	*tmp;
 	char	buf[2];
 	int		r;
-	char	*nl;
 
 	tmp = NULL;
 	line = ft_strnew(0);
@@ -38,8 +38,7 @@ char	*ft_get_line(int const fd)
 		ft_strdel(&line);
 		line = tmp;
 	}
-	if ((nl = ft_strchr(line, '\n')) != NULL)
-		*nl = '\n';
+	*ft_strchr(line, '\n') = '\0';
 	return (line);
 }
 
@@ -77,7 +76,9 @@ void	parse_tube(char *line)
 
 	token = ft_strsplit(line, '-');
 	left = room_find_by_name(g_room_list, token[0]);
+	ft_putendl("LEFT");
 	right = room_find_by_name(g_room_list, token[1]);
+	ft_putendl("RIGHT");
 	neighbour_push_front(&left->next_neighbour, right);
 	neighbour_push_front(&right->next_neighbour, left);
 }
@@ -96,10 +97,15 @@ t_room	*room_find_by_name(t_room *room, char *name)
 {
 	while (room != NULL)
 	{
-		if (ft_strequ(name, room->name))
+		ft_putstr(name);
+		ft_putstr(" <> ");
+		ft_putstr(room->name);
+		ft_putstr("\n");
+		if (ft_strcmp(name, room->name) == 0)
 		{
 			return (room);
 		}
+		room = room->next;
 	}
 	return (NULL);
 }
@@ -148,7 +154,73 @@ t_neighbour	*get_closest_neighbour(t_room *room)
 	return (closest);
 }
 
+int		count_occurences_of_char(char *str, char c)
+{
+	int		count;
+	int		i;
+
+	count = 0;
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == c)
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+int		ft_strisnum(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int		main(void)
 {
-	return (0);
+	char	*line;
+
+	line = NULL;
+	while ((line = ft_get_line(STDIN_FILENO)) != NULL)
+	{
+		ft_putendl("while top");
+		if (line[0] == '#' && line[1] == '#')
+		{
+			ft_putendl("a");
+			ft_putendl(line);
+			g_next_attr = ft_strdup(line);
+		}
+		else if (line[0] == '#')
+		{
+			ft_putendl("b");
+			ft_putstr(line);
+		}
+		else if (count_occurences_of_char(line, ' ') == 2)
+		{
+			ft_putendl("c");
+			parse_room(line);
+		}
+		else if (count_occurences_of_char(line, ' ') == 0 && ft_strchr(line, '-'))
+		{
+			ft_putendl("d");
+			parse_tube(line);
+		}
+		else if (count_occurences_of_char(line, ' ') == 0 && ft_strisnum(line))
+		{
+			ft_putendl("e");
+			g_ant_count = ft_atoi(line);
+		}
+		ft_putendl("freeing line");
+		ft_strdel(&line);
+		ft_putendl("while bottom");
+	}
+	return (EXIT_SUCCESS);
 }
