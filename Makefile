@@ -6,7 +6,7 @@
 #    By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/03/05 14:47:20 by nmohamed          #+#    #+#              #
-#    Updated: 2015/12/15 15:25:40 by nmohamed         ###   ########.fr        #
+#    Updated: 2015/12/15 18:41:53 by nmohamed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ INC		:=	lemin.h
 CC		:=	gcc
 NAME	:=	lemin
 OBJ		:=	$(SRC:.c=.o)
-CFLAGS	:=	-I./ -I./libft -Wall -Wextra -Werror
+CFLAGS	:=	-I./ -I./libft -Wall -Wextra
 LDFLAGS	:=	-L./libft -lft
 
 all		:	libft $(NAME)

@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 18:24:22 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/15 18:58:06 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,11 @@ void		parse_room(char *line)
 	room.distance = INFINITE;
 	room.next = NULL;
 	room.attr = g_next_attr;
+	room.next_neighbour = NULL;
 	g_next_attr = NULL;
 	room_push_front(&g_room_list, &room);
 	ft_printf("%s %d %d\n", g_room_list->name, g_room_list->x, g_room_list->y);
+	//printf("%p\n")
 }
 
 void	room_push_front(t_room **room_head, t_room *room_to_copy)
@@ -113,14 +115,17 @@ void	calculate_route(t_room *room, int distance)
 	t_neighbour	*neighbour;
 
 	distance = distance + 1;
-	if (room != NULL)
+	if (room != NULL || ft_strcmp("##start", room->name) == 0)
 	{
 		neighbour = room->next_neighbour;
+		//ft_printf("neighbour = room->next_neighbour (%s)\n", neighbour->room->name);
 		while (neighbour != NULL)
 		{
 			neighbour->room->distance = distance;
+			//ft_printf("neighbour->room->distance = %d\n", distance);
 			calculate_route(neighbour->room, distance);
 			neighbour = neighbour->next;
+			//ft_printf("neighbour = neighbour->next (%s)\n", neighbour->room->name);
 		}
 	}
 }
@@ -182,8 +187,13 @@ int		ft_strisnum(char *str)
 	return (1);
 }
 
+#include <stdio.h>
+
 int		main(void)
 {
+	t_room	*tmp;
+	t_neighbour	*n;
+
 	char	*line;
 
 	line = NULL;
@@ -220,6 +230,19 @@ int		main(void)
 		ft_strdel(&line);
 		//ft_putendl("while bottom");
 	}
-	calculate_route(g_room_list, 0);
+	tmp = g_room_list;
+	while (tmp != NULL)
+	{
+		ft_printf("name: %s\n", tmp->name);
+		(void)n;
+		n = tmp->next_neighbour;
+		while (n != NULL)
+		{
+			ft_printf("   link: %s\n", n->room->name);
+			n = n->next;
+		}
+		tmp = tmp->next;
+	}
+	//calculate_route(g_room_list, 0);
 	return (EXIT_SUCCESS);
 }
