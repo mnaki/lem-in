@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 17:43:21 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/15 17:48:27 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void		parse_room(char *line)
 {
 	char		**token;
 	t_room		room;
-
+	
 	token = ft_strsplit(line, ' ');
 	room.name = token[0];
 	room.x = ft_atoi(token[1]);
