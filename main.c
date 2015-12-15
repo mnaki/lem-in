@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 17:42:38 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/15 17:43:21 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*ft_get_line(int const fd)
 	return (line);
 }
 
-void	parse_room(char *line)
+void		parse_room(char *line)
 {
 	char		**token;
 	t_room		room;
