@@ -1,46 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 15:27:45 by nmohamed         ###   ########.fr       */
+/*   Created: 2015/01/21 15:46:16 by nmohamed          #+#    #+#             */
+/*   Updated: 2015/01/23 11:53:27 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "lemin.h"
 
-char	*ft_get_line(int const fd)
+int		ft_strcmp(const char *s1, const char *s2)
 {
-	char	*line;
-	char	*tmp;
-	char	buf[2];
-	int		r;
-	char	*nl;
+	size_t	i;
 
-	tmp = NULL;
-	line = ft_strnew(0);
-	ft_bzero(buf, 2);
-	while (buf[0] != '\n')
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0')
 	{
-		r = read(fd, buf, 1);
-		if (r < 0)
-			return (NULL);
-		else if (r == 0)
-			return (NULL);
-		tmp = ft_strjoin(line, buf);
-		ft_strdel(&line);
-		line = tmp;
+		if (i[(unsigned char*)s1] != i[(unsigned char*)s2])
+			return (i[(unsigned char*)s1] - i[(unsigned char*)s2]);
+		i++;
 	}
-	if ((nl = ft_strchr(line, '\n')) != NULL)
-		*nl = '\n';
-	return (line);
-}
-
-int		main(void)
-{
+	if (i[(unsigned char*)s1] != i[(unsigned char*)s2])
+		return (i[(unsigned char*)s1] - i[(unsigned char*)s2]);
 	return (0);
 }

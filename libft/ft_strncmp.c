@@ -1,46 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 15:27:45 by nmohamed         ###   ########.fr       */
+/*   Created: 2015/01/21 15:46:16 by nmohamed          #+#    #+#             */
+/*   Updated: 2015/11/28 14:48:37 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "lemin.h"
 
-char	*ft_get_line(int const fd)
+int		ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	char	*line;
-	char	*tmp;
-	char	buf[2];
-	int		r;
-	char	*nl;
+	size_t	i;
 
-	tmp = NULL;
-	line = ft_strnew(0);
-	ft_bzero(buf, 2);
-	while (buf[0] != '\n')
+	i = 0;
+	while (i < n)
 	{
-		r = read(fd, buf, 1);
-		if (r < 0)
-			return (NULL);
-		else if (r == 0)
-			return (NULL);
-		tmp = ft_strjoin(line, buf);
-		ft_strdel(&line);
-		line = tmp;
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
 	}
-	if ((nl = ft_strchr(line, '\n')) != NULL)
-		*nl = '\n';
-	return (line);
-}
-
-int		main(void)
-{
 	return (0);
 }
