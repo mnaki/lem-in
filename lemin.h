@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:46:33 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 17:24:46 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/15 17:42:41 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,17 @@ typedef struct s_neighbour t_neighbour;
 struct s_room
 {
 	char		*name;
+	int			x;
+	int			y;
+	int			distance;
+	char		*attr;
 	t_room		*next;
 	t_neighbour	*next_neighbour;
 };
 
 struct s_neighbour
 {
-	room		*room;
+	t_room		*room;
 	t_neighbour	*next;
 };
 
@@ -37,9 +41,9 @@ void			parse_room(char *line);
 void			room_push_front(t_room **room_head, t_room *room_to_copy);
 void			parse_tube(char *line);
 void			neighbour_push_front(t_neighbour **neighbour, t_room *room);
-void			room_find_by_name(t_room *room, char *name);
-void			calculate_route(t_room *room, distance);
+t_room			*room_find_by_name(t_room *room, char *name);
+void			calculate_route(t_room *room, int distance);
 void			follow_route(t_room *room);
-void			get_closest_neighbour(t_room *room);
+t_neighbour		*get_closest_neighbour(t_room *room);
 
-endif
+#endif

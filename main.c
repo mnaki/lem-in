@@ -6,12 +6,15 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 17:24:29 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/15 17:42:38 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "lemin.h"
+
+char	*g_next_attr = NULL;
+t_room	*g_room_list = NULL;
 
 char	*ft_get_line(int const fd)
 {
@@ -40,15 +43,43 @@ char	*ft_get_line(int const fd)
 	return (line);
 }
 
-void	parse_room(char *line);
+void	parse_room(char *line)
+{
+	char		**token;
+	t_room		room;
 
-void	room_push_front(t_room **room_head, t_room *room_to_copy);
+	token = ft_strsplit(line, ' ');
+	room.name = token[0];
+	room.x = ft_atoi(token[1]);
+	room.y = ft_atoi(token[2]);
+	room.distance = INFINITE;
+	room.next = NULL;
+	room.attr = g_next_attr;
+	g_next_attr = NULL;
+	room_push_front(&g_room_list, &room);
+}
+
+void	room_push_front(t_room **room_head, t_room *room_to_copy)
+{
+	t_room		*new_room;
+
+	new_room = malloc(sizeof(*new_room));
+	ft_memcpy(new_room, room_to_copy, sizeof(room_to_copy));
+	new_room->next = *room_head;
+	*room_head = new_room;
+}
 
 void	parse_tube(char *line)
 {
 	char	**token;
+	t_room	*left;
+	t_room	*right;
 
 	token = ft_strsplit(line, '-');
+	left = room_find_by_name(g_room_list, token[0]);
+	right = room_find_by_name(g_room_list, token[1]);
+	neighbour_push_front(&left->next_neighbour, right);
+	neighbour_push_front(&right->next_neighbour, left);
 }
 
 void	neighbour_push_front(t_neighbour **neighbour, t_room *room)
@@ -57,11 +88,11 @@ void	neighbour_push_front(t_neighbour **neighbour, t_room *room)
 
 	new_neighbour = malloc(sizeof(*new_neighbour));
 	new_neighbour->room = room;
-	new_neighbour->new_neighbour = *neighbour;
+	new_neighbour->next = *neighbour;
 	*neighbour = new_neighbour;
 }
 
-void	room_find_by_name(t_room *room, char *name)
+t_room	*room_find_by_name(t_room *room, char *name)
 {
 	while (room != NULL)
 	{
@@ -73,18 +104,18 @@ void	room_find_by_name(t_room *room, char *name)
 	return (NULL);
 }
 
-void	calculate_route(t_room *room, distance)
+void	calculate_route(t_room *room, int distance)
 {
 	t_neighbour	*neighbour;
 
 	distance = distance + 1;
 	if (room != NULL)
 	{
-		neighbour = room.next_neighbour;
+		neighbour = room->next_neighbour;
 		while (neighbour != NULL)
 		{
 			neighbour->room->distance = distance;
-			calculate_route(neighbour.room);
+			calculate_route(neighbour->room, distance);
 			neighbour = neighbour->next;
 		}
 	}
@@ -94,12 +125,12 @@ void	follow_route(t_room *room)
 {
 	while (!ft_strequ(room->attr, "##end"))
 	{
-		room = get_closest_neighbour(room);
-		putstr("PLACEHOLDER");
+		room = get_closest_neighbour(room)->room;
+		ft_putstr("PLACEHOLDER");
 	}
 }
 
-void	get_closest_neighbour(t_room *room)
+t_neighbour	*get_closest_neighbour(t_room *room)
 {
 	t_neighbour	*n;
 	t_neighbour	*closest;
@@ -110,9 +141,9 @@ void	get_closest_neighbour(t_room *room)
 	{
 		if (n->room->distance < closest->room->distance)
 		{
-			closest = n->room;
+			closest = n;
 		}
-		n = n->next_neighbour;
+		n = n->next;
 	}
 	return (closest);
 }
