@@ -47,5 +47,11 @@ t_room						*room_find_by_name(t_room *room, char *name);
 void						calculate_route(t_room *room, int distance);
 void						follow_route(t_room *room, t_room *destination);
 t_neighbour					*get_closest_neighbour(t_room *room);
+char						*ft_get_line(int const fd);
+void						parse_attr(char *line);
+t_room						*room_find_by_attr(t_room *room, char *attr);
+int							charcount(char *str, char c);
+int							ft_strisnum(char *str);
+void						debug(void);
 
 #endif

@@ -10,13 +10,13 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC		:=	main.c
+SRC		:=	dijkstra.c main.c parser.c room.c utils.c
 INC		:=	lemin.h
 
 CC		:=	gcc
 NAME	:=	lemin
 OBJ		:=	$(SRC:.c=.o)
-CFLAGS	:=	-I./ -I./libft -Wall -Wextra
+CFLAGS	:=	-I./ -I./libft -Wall -Wextra -Werror
 LDFLAGS	:=	-L./libft -lft
 
 all		:	libft $(NAME)
