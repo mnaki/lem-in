@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/16 16:28:21 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/16 16:49:32 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ t_room	*room_find_by_attr(t_room *room, char *attr)
 {
 	while (room != NULL)
 	{
-		printf("%s <> %s\n", attr, room->attr);
 		if (room->attr != NULL && ft_strcmp(attr, room->attr) == 0)
 		{
 			return (room);
@@ -136,7 +135,7 @@ void	calculate_route(t_room *room, int distance)
 			if (neighbour->room->distance == -1 || neighbour->room->distance > distance + 1)
 			{
 				neighbour->room->distance = distance + 1;
-				printf("neighbour %s, distance %d\n", neighbour->room->name, neighbour->room->distance);
+				ft_printf("neighbour %s, distance %d\n", neighbour->room->name, neighbour->room->distance);
 				calculate_route(neighbour->room, distance + 1);
 			}
 			neighbour = neighbour->next;
@@ -152,7 +151,7 @@ void	follow_route(t_room *room, t_room *destination)
 	{
 		tmp = room;
 		room = get_closest_neighbour(room)->room;
-		printf("L0-%s (cost: %d)\n", room->name, tmp->distance - room->distance);
+		ft_printf("L0-%s (cost: %d)\n", room->name, tmp->distance - room->distance);
 	}
 }
 
@@ -204,7 +203,11 @@ int		ft_strisnum(char *str)
 	return (1);
 }
 
-#include <stdio.h>
+void	parse_attr(char *line)
+{
+	g_next_attr = ft_strdup(line);
+	ft_putendl(g_next_attr);
+}
 
 int		main(void)
 {
@@ -218,36 +221,17 @@ int		main(void)
 	line = NULL;
 	while ((line = ft_get_line(STDIN_FILENO)) != NULL)
 	{
-		//ft_putendl("while top");
 		if (line[0] == '#' && line[1] == '#')
-		{
-			//ft_putendl("a");
-			g_next_attr = ft_strdup(line);
-			ft_putendl(g_next_attr);
-		}
+			parse_attr(line);
 		else if (line[0] == '#')
-		{
-			//ft_putendl("b");
 			ft_putendl(line);
-		}
 		else if (count_occurences_of_char(line, ' ') == 2)
-		{
-			//ft_putendl("c");
 			parse_room(line);
-		}
 		else if (count_occurences_of_char(line, ' ') == 0 && ft_strchr(line, '-'))
-		{
-			//ft_putendl("d");
 			parse_tube(line);
-		}
 		else if (count_occurences_of_char(line, ' ') == 0 && ft_strisnum(line))
-		{
-			//ft_putendl("e");
 			g_ant_count = ft_atoi(line);
-		}
-		//ft_putendl("freeing line");
 		ft_strdel(&line);
-		//ft_putendl("while bottom");
 	}
 	start_p = room_find_by_attr(g_room_list, "##start");
 	end_p = room_find_by_attr(g_room_list, "##end");
