@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/16 16:49:32 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/16 17:00:35 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void		parse_room(char *line)
 {
 	char		**token;
 	t_room		room;
-	
+
 	token = ft_strsplit(line, ' ');
 	room.name = token[0];
 	room.x = ft_atoi(token[1]);
@@ -57,7 +57,8 @@ void		parse_room(char *line)
 	room.next_neighbour = NULL;
 	g_next_attr = NULL;
 	room_push_front(&g_room_list, &room);
-	ft_printf("%s %d %d (%s)\n", g_room_list->name, g_room_list->x, g_room_list->y, g_room_list->attr);
+	ft_printf("%s %d %d (%s)\n", g_room_list->name, g_room_list->x
+	, g_room_list->y, g_room_list->attr);
 }
 
 void	room_push_front(t_room **room_head, t_room *room_to_copy)
@@ -122,7 +123,6 @@ t_room	*room_find_by_attr(t_room *room, char *attr)
 	return (NULL);
 }
 
-
 void	calculate_route(t_room *room, int distance)
 {
 	t_neighbour		*neighbour;
@@ -132,10 +132,12 @@ void	calculate_route(t_room *room, int distance)
 		neighbour = room->next_neighbour;
 		while (neighbour != NULL)
 		{
-			if (neighbour->room->distance == -1 || neighbour->room->distance > distance + 1)
+			if (neighbour->room->distance == -1
+				|| neighbour->room->distance > distance + 1)
 			{
 				neighbour->room->distance = distance + 1;
-				ft_printf("neighbour %s, distance %d\n", neighbour->room->name, neighbour->room->distance);
+				ft_printf("neighbour %s, distance %d\n"
+				, neighbour->room->name, neighbour->room->distance);
 				calculate_route(neighbour->room, distance + 1);
 			}
 			neighbour = neighbour->next;
@@ -151,7 +153,8 @@ void	follow_route(t_room *room, t_room *destination)
 	{
 		tmp = room;
 		room = get_closest_neighbour(room)->room;
-		ft_printf("L0-%s (cost: %d)\n", room->name, tmp->distance - room->distance);
+		ft_printf("L0-%s (cost: %d)\n", room->name
+		, tmp->distance - room->distance);
 	}
 }
 
@@ -173,7 +176,7 @@ t_neighbour	*get_closest_neighbour(t_room *room)
 	return (closest);
 }
 
-int		count_occurences_of_char(char *str, char c)
+int		charcount(char *str, char c)
 {
 	int		count;
 	int		i;
@@ -209,27 +212,43 @@ void	parse_attr(char *line)
 	ft_putendl(g_next_attr);
 }
 
-int		main(void)
+void	debug(void)
 {
 	t_room	*tmp;
 	t_neighbour	*n;
-	t_room	*start_p;
-	t_room	*end_p;
 
-	char	*line;
+	tmp = g_room_list;
+	while (tmp != NULL)
+	{
+		ft_printf("name: %s\n", tmp->name);
+		n = tmp->next_neighbour;
+		while (n != NULL)
+		{
+			ft_printf("   link: %s (distance -> %d)\n"
+			, n->room->name, n->room->distance);
+			n = n->next;
+		}
+		tmp = tmp->next;
+	}
+}
 
-	line = NULL;
+int		main(void)
+{
+	t_room		*start_p;
+	t_room		*end_p;
+	char		*line;
+
 	while ((line = ft_get_line(STDIN_FILENO)) != NULL)
 	{
 		if (line[0] == '#' && line[1] == '#')
 			parse_attr(line);
 		else if (line[0] == '#')
 			ft_putendl(line);
-		else if (count_occurences_of_char(line, ' ') == 2)
+		else if (charcount(line, ' ') == 2)
 			parse_room(line);
-		else if (count_occurences_of_char(line, ' ') == 0 && ft_strchr(line, '-'))
+		else if (charcount(line, ' ') == 0 && ft_strchr(line, '-'))
 			parse_tube(line);
-		else if (count_occurences_of_char(line, ' ') == 0 && ft_strisnum(line))
+		else if (charcount(line, ' ') == 0 && ft_strisnum(line))
 			g_ant_count = ft_atoi(line);
 		ft_strdel(&line);
 	}
@@ -237,19 +256,6 @@ int		main(void)
 	end_p = room_find_by_attr(g_room_list, "##end");
 	end_p->distance = 0;
 	calculate_route(end_p, 0);
-	tmp = g_room_list;
-	while (tmp != NULL)
-	{
-		ft_printf("name: %s\n", tmp->name);
-		(void)n;
-		n = tmp->next_neighbour;
-		while (n != NULL)
-		{
-			ft_printf("   link: %s (distance -> %d)\n", n->room->name, n->room->distance);
-			n = n->next;
-		}
-		tmp = tmp->next;
-	}
 	follow_route(start_p, end_p);
 	return (EXIT_SUCCESS);
 }
