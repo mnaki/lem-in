@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 22:26:56 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/16 16:28:21 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void		parse_room(char *line)
 	room.name = token[0];
 	room.x = ft_atoi(token[1]);
 	room.y = ft_atoi(token[2]);
-	room.distance = INFINITE;
+	room.distance = -1;
 	room.next = NULL;
 	room.attr = g_next_attr;
 	room.next_neighbour = NULL;
@@ -124,53 +124,35 @@ t_room	*room_find_by_attr(t_room *room, char *attr)
 }
 
 
-void	calculate_route(t_room *room, int distance, t_room *prev)
+void	calculate_route(t_room *room, int distance)
 {
 	t_neighbour		*neighbour;
 
-	if (ft_strcmp("##start", room->name) == 0)
-	{
-		ft_putendl("FOUND");
-		return ;
-	}
 	if (room != NULL)
 	{
 		neighbour = room->next_neighbour;
 		while (neighbour != NULL)
 		{
-			if (prev != neighbour->room)
+			if (neighbour->room->distance == -1 || neighbour->room->distance > distance + 1)
 			{
-			if (distance < neighbour->room->distance)
-				neighbour->room->distance = distance;
-			printf("neighbour %s, distance %d\n", neighbour->room->name, neighbour->room->distance);
-			calculate_route(neighbour->room, distance + 1, room);
+				neighbour->room->distance = distance + 1;
+				printf("neighbour %s, distance %d\n", neighbour->room->name, neighbour->room->distance);
+				calculate_route(neighbour->room, distance + 1);
 			}
 			neighbour = neighbour->next;
 		}
 	}
 }
 
-void	follow_route(t_room *room)
+void	follow_route(t_room *room, t_room *destination)
 {
-	t_neighbour		*tmp;
-	static t_room	*already_walked = NULL;
+	t_room	*tmp;
 
-	ft_putstr("following\n");
-	while (1)
+	while (room != destination)
 	{
-		//ft_putendl("ITERATION");
-		room_push_front(&already_walked, room);
-		if (room->attr != NULL && ft_strcmp(room->attr, "##end") == 0)
-		{
-			return ;
-		}
+		tmp = room;
 		room = get_closest_neighbour(room)->room;
-		//ft_putendl("XXX");
-		while (room != NULL && room_find_by_name(already_walked, room->name))
-			room = room->next;
-		//ft_putendl("YYY");
-		printf("%s\n", room->name);
-		//ft_putendl("ENDITERSATION");
+		printf("L0-%s (cost: %d)\n", room->name, tmp->distance - room->distance);
 	}
 }
 
@@ -179,7 +161,6 @@ t_neighbour	*get_closest_neighbour(t_room *room)
 	t_neighbour		*n;
 	t_neighbour		*closest;
 
-	//ft_putendl("GCEN BEGIN");
 	n = room->next_neighbour;
 	closest = n;
 	while (n != NULL)
@@ -190,7 +171,6 @@ t_neighbour	*get_closest_neighbour(t_room *room)
 		}
 		n = n->next;
 	}
-	//ft_putendl("GCEN END");
 	return (closest);
 }
 
@@ -231,6 +211,7 @@ int		main(void)
 	t_room	*tmp;
 	t_neighbour	*n;
 	t_room	*start_p;
+	t_room	*end_p;
 
 	char	*line;
 
@@ -268,6 +249,10 @@ int		main(void)
 		ft_strdel(&line);
 		//ft_putendl("while bottom");
 	}
+	start_p = room_find_by_attr(g_room_list, "##start");
+	end_p = room_find_by_attr(g_room_list, "##end");
+	end_p->distance = 0;
+	calculate_route(end_p, 0);
 	tmp = g_room_list;
 	while (tmp != NULL)
 	{
@@ -276,15 +261,11 @@ int		main(void)
 		n = tmp->next_neighbour;
 		while (n != NULL)
 		{
-			ft_printf("   link: %s\n", n->room->name);
+			ft_printf("   link: %s (distance -> %d)\n", n->room->name, n->room->distance);
 			n = n->next;
 		}
 		tmp = tmp->next;
 	}
-	calculate_route(room_find_by_attr(g_room_list, "##end"), 0, NULL);
-	ft_putendl("kkk");
-	start_p = room_find_by_attr(g_room_list, "##start");
-	ft_putendl("ok");
-	follow_route(start_p);
+	follow_route(start_p, end_p);
 	return (EXIT_SUCCESS);
 }

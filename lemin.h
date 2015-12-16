@@ -6,13 +6,13 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:46:33 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/15 21:38:12 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/16 15:58:31 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEMIN_H
 # define LEMIN_H
-# define INFINITE 0x7fffffff
+//# define INFINITE 0x7fffffff
 
 typedef struct s_room t_room;
 typedef struct s_neighbour t_neighbour;
@@ -43,8 +43,8 @@ void			room_push_front(t_room **room_head, t_room *room_to_copy);
 void			parse_tube(char *line);
 void			neighbour_push_front(t_neighbour **neighbour, t_room *room);
 t_room			*room_find_by_name(t_room *room, char *name);
-void			calculate_route(t_room *room, int distance, t_room *prev);
-void			follow_route(t_room *room);
+void			calculate_route(t_room *room, int distance);
+void			follow_route(t_room *room, t_room *destination);
 t_neighbour		*get_closest_neighbour(t_room *room);
 
 #endif
