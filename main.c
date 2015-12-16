@@ -23,7 +23,6 @@ int		main(void)
 	t_room		*end_p;
 	char		*line;
 
-	// line = NULL;
 	while ((line = ft_get_line(STDIN_FILENO)) != NULL)
 	{
 		if (line[0] == '#' && line[1] == '#')
