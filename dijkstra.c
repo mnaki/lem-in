@@ -6,7 +6,7 @@
 /*   By: nmohamed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 17:18:12 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/16 17:18:14 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/18 17:41:13 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void		calculate_route(t_room *room, int distance)
 				|| neighbour->room->distance > distance + 1)
 			{
 				neighbour->room->distance = distance + 1;
-				ft_printf("neighbour %s, distance %d\n"
-				, neighbour->room->name, neighbour->room->distance);
+				//ft_printf("neighbour %s, distance %d\n"
+				//, neighbour->room->name, neighbour->room->distance);
 				calculate_route(neighbour->room, distance + 1);
 			}
 			neighbour = neighbour->next;
@@ -37,15 +37,17 @@ void		calculate_route(t_room *room, int distance)
 
 void		follow_route(t_room *room, t_room *destination)
 {
-	t_room	*tmp;
+	t_room		*tmp;
+	static int	i = 0;
 
 	while (room != destination)
 	{
 		tmp = room;
 		room = get_closest_neighbour(room)->room;
-		ft_printf("L0-%s (cost: %d)\n", room->name
+		ft_printf("// L%d-%s\n", i, room->name
 		, tmp->distance - room->distance);
 	}
+	i++;
 }
 
 t_neighbour	*get_closest_neighbour(t_room *room)

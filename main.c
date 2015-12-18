@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/16 17:18:17 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/18 18:08:05 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ int		main(void)
 		if (line[0] == '#' && line[1] == '#')
 			parse_attr(line);
 		else if (line[0] == '#')
+		{
+			ft_putstr("// ");
 			ft_putendl(line);
+		}
 		else if (charcount(line, ' ') == 2)
 			parse_room(line);
 		else if (charcount(line, ' ') == 0 && ft_strchr(line, '-'))
@@ -41,6 +44,8 @@ int		main(void)
 	end_p = room_find_by_attr(g_room_list, "##end");
 	end_p->distance = 0;
 	calculate_route(end_p, 0);
-	follow_route(start_p, end_p);
+	ft_putstr("s.refresh();\n");
+	while (g_ant_count--)
+		follow_route(start_p, end_p);
 	return (EXIT_SUCCESS);
 }
