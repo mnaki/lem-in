@@ -1,0 +1,86 @@
+##start
+1 23 3 (##start)
+2 16 7 ((null))
+#commentaire
+3 16 3 ((null))
+4 16 5 ((null))
+5 9 3 ((null))
+6 1 5 ((null))
+7 4 8 ((null))
+##end
+0 9 5 (##end)
+0-4
+0-6
+1-3
+4-3
+5-2
+3-5
+#autre commentaire
+4-2
+2-1
+7-6
+7-2
+7-4
+6-5
+name: 0
+   link: 6 (distance -> 1)
+   link: 4 (distance -> 1)
+name: 7
+   link: 4 (distance -> 1)
+   link: 2 (distance -> 2)
+   link: 6 (distance -> 1)
+name: 6
+   link: 5 (distance -> 2)
+   link: 7 (distance -> 2)
+   link: 0 (distance -> 0)
+name: 5
+   link: 6 (distance -> 1)
+   link: 3 (distance -> 2)
+   link: 2 (distance -> 2)
+name: 4
+   link: 7 (distance -> 2)
+   link: 2 (distance -> 2)
+   link: 3 (distance -> 2)
+   link: 0 (distance -> 0)
+name: 3
+   link: 5 (distance -> 2)
+   link: 4 (distance -> 1)
+   link: 1 (distance -> 3)
+name: 2
+   link: 7 (distance -> 2)
+   link: 1 (distance -> 3)
+   link: 4 (distance -> 1)
+   link: 5 (distance -> 2)
+name: 1
+   link: 2 (distance -> 2)
+   link: 3 (distance -> 2)
+##start <> ##end
+##start <> (null)
+##start <> (null)
+##start <> (null)
+##start <> (null)
+##start <> (null)
+##start <> (null)
+##start <> ##start
+##end <> ##end
+neighbour 6, distance 1
+neighbour 5, distance 2
+neighbour 3, distance 3
+neighbour 4, distance 4
+neighbour 7, distance 5
+neighbour 2, distance 6
+neighbour 1, distance 7
+neighbour 2, distance 5
+neighbour 1, distance 6
+neighbour 1, distance 4
+neighbour 2, distance 3
+neighbour 7, distance 4
+neighbour 7, distance 2
+neighbour 4, distance 3
+neighbour 4, distance 1
+neighbour 2, distance 2
+neighbour 1, distance 3
+neighbour 3, distance 2
+L0-2 (cost: 1)
+L0-4 (cost: 1)
+L0-0 (cost: 1)
