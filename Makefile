@@ -6,14 +6,14 @@
 #    By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/03/05 14:47:20 by nmohamed          #+#    #+#              #
-#    Updated: 2015/12/15 18:41:53 by nmohamed         ###   ########.fr        #
+#    Updated: 2015/12/22 15:16:39 by nmohamed         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC		:=	dijkstra.c main.c parser.c room.c utils.c
 INC		:=	lemin.h
 
-CC		:=	gcc
+CC		:=	gcc -g
 NAME	:=	lemin
 OBJ		:=	$(SRC:.c=.o)
 CFLAGS	:=	-I./ -I./libft -Wall -Wextra -Werror

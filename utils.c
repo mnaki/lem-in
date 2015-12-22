@@ -6,7 +6,7 @@
 /*   By: nmohamed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 17:18:36 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/16 17:18:40 by nmohamed         ###   ########.fr       */
+/*   Updated: 2015/12/22 15:37:01 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ char	*ft_get_line(int const fd)
 		ft_strdel(&line);
 		line = tmp;
 	}
-	*ft_strchr(line, '\n') = '\0';
+	//if (r >= 0)
+		*ft_strchr(line, '\n') = '\0';
 	return (line);
 }
 
