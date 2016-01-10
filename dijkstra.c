@@ -6,7 +6,7 @@
 /*   By: nmohamed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 17:18:12 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/22 15:49:04 by nmohamed         ###   ########.fr       */
+/*   Updated: 2016/01/10 14:30:06 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void		calculate_route(t_room *room, int distance)
 		neighbour = room->next_neighbour;
 		while (neighbour != NULL)
 		{
-			if (neighbour->room != NULL && (neighbour->room->distance == -1 || neighbour->room->distance > distance + 1))
+			if (neighbour->room != NULL
+				&& (neighbour->room->distance == -1
+					|| neighbour->room->distance > distance + 1))
 			{
 				neighbour->room->distance = distance + 1;
 				calculate_route(neighbour->room, distance + 1);
