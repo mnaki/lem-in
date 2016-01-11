@@ -6,7 +6,7 @@
 /*   By: nmohamed <nmohamed@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:26:41 by nmohamed          #+#    #+#             */
-/*   Updated: 2015/12/22 15:49:51 by nmohamed         ###   ########.fr       */
+/*   Updated: 2016/01/11 12:11:17 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void	parse(void)
 		else if (charcount(line, ' ') == 0 && ft_strchr(line, '-'))
 			parse_tube(line);
 		else if (charcount(line, ' ') == 0 && ft_strisnum(line))
+		{
 			g_ant_count = ft_atoi(line);
+			ft_printf("%d\n", g_ant_count);
+		}
 		ft_strdel(&line);
 	}
 }
@@ -51,7 +54,6 @@ int		main(void)
 		exit(1);
 	}
 	end_p->distance = 0;
-	ERR("Calculating route");
 	calculate_route(end_p, 0);
 	if (g_ant_count == 0)
 		ERR("No ants");

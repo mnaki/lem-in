@@ -6,12 +6,14 @@
 /*   By: nmohamed <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/16 17:18:12 by nmohamed          #+#    #+#             */
-/*   Updated: 2016/01/10 14:30:06 by nmohamed         ###   ########.fr       */
+/*   Updated: 2016/01/11 12:16:17 by nmohamed         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "lemin.h"
+
+static int	g_max_depth = 0;
 
 void		calculate_route(t_room *room, int distance)
 {
@@ -26,6 +28,8 @@ void		calculate_route(t_room *room, int distance)
 				&& (neighbour->room->distance == -1
 					|| neighbour->room->distance > distance + 1))
 			{
+				if (distance + 1 > g_max_depth)
+					g_max_depth = distance + 1;
 				neighbour->room->distance = distance + 1;
 				calculate_route(neighbour->room, distance + 1);
 			}
@@ -38,13 +42,21 @@ void		follow_route(t_room *room, t_room *destination)
 {
 	t_room		*tmp;
 	static int	i = 0;
+	int			jumps;
 
+	jumps = 0;
 	while (room != destination)
 	{
+		if (jumps > g_max_depth)
+		{
+			ERR("Are you trying too fool me?");
+			exit(0);
+		}
 		tmp = room;
 		room = get_closest_neighbour(room)->room;
 		ft_printf("L%d-%s\n", i, room->name
 		, tmp->distance - room->distance);
+		jumps++;
 	}
 	i++;
 }
